@@ -20,7 +20,7 @@ public static void main(String[] args) {
             response.append(line);
         }
 
-        // Parsing the response and extracting desired information (in this case, the current stock price)
+        // Parsing the response and extracting the current stock price
         String[] lines = response.toString().split("\n");
         for (String l : lines) {
             if (l.contains("regularMarketPrice")) {
