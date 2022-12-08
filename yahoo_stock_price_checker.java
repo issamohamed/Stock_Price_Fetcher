@@ -8,11 +8,11 @@ public static void main(String[] args) {
         // Creating the URL object with the desired stock symbol
         URL url = new URL(API_URL + stockSymbol);
 
-        // Open the connection and set the request method
+        // Opening the connection and setting the request method
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
 
-        // Read the response from the API
+        // Reading the response from the API
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         StringBuilder response = new StringBuilder();
         String line;
