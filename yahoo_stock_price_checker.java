@@ -13,7 +13,7 @@ public class StockPriceFetcher {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.print("What stock would you like to look at today? (or 'exit' to quit) ");
+            System.out.print("What stock would you like to look at today? Make sure to type in your stock's NYSE abbreivation! (or 'exit' to quit) ");
             String input = scanner.nextLine();
 
             if (input.equalsIgnoreCase("exit")) {
