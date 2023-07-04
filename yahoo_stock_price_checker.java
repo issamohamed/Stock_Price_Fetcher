@@ -3,17 +3,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class StockPriceFetcher {
-    private static final String API_URL = "https://finance.yahoo.com/quote/";
+    private static final String API_KEY = "99LZY9F61GXU1LAF";
+    private static final String API_URL = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=";
 
     public static void main(String[] args) {
-        String stockSymbol = "AAPL"; // example: Apple Inc.
+        String stockSymbol = "AAPL"; // Example: Apple Inc.
 
         try {
-            // Creating the URL object with the desired stock symbol
-            URL url = new URL(API_URL + stockSymbol);
+            // Creating the URL object with the desired stock symbol and API key
+            URL url = new URL(API_URL + stockSymbol + "&apikey=" + API_KEY);
 
             // Opening the connection and setting the request method
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -28,19 +30,23 @@ public class StockPriceFetcher {
             }
 
             // Parsing the response and extracting the current stock price
-            String jsonString = response.toString();
-            int startIndex = jsonString.indexOf("root.App.main = ") + 17;
-            int endIndex = jsonString.indexOf(";\n}(this));");
-            String json = jsonString.substring(startIndex, endIndex);
-            JSONObject data = new JSONObject(json);
-            JSONObject quote = data.getJSONObject("context").getJSONObject("dispatcher").getJSONObject("stores").getJSONObject("QuoteSummaryStore").getJSONArray("price").getJSONObject(0);
-            String price = quote.getJSONObject("regularMarketPrice").getString("fmt");
-
-            // Print the current stock price
-            System.out.println("The current price for " + stockSymbol + " is: " + price);
+            String price = parseStockPrice(response.toString());
+            System.out.println("The current price for " + stockSymbol + " is: $" + price);
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private static String parseStockPrice(String json) {
+        try {
+            JSONObject data = new JSONObject(json);
+            JSONObject globalQuote = data.getJSONObject("Global Quote");
+            String price = globalQuote.getString("05. price");
+            return price;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
